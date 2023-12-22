@@ -2,7 +2,6 @@ import { Body, Controller, Post, Get, UseGuards, Put, Param, Res, Delete } from 
 import globalConstants from 'src/global';
 import ResponseHandlers from 'src/utilities/responseHandlers';
 import { InventoryService } from './inventory.service';
-import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('inventory')
 export class InventoryController {
@@ -11,7 +10,6 @@ export class InventoryController {
     private inventoryService: InventoryService,
   ) {}
 
-  @UseGuards(AuthGuard)
   @Post("addNew")
   async addNewProduct(@Body() productInfo: any) {
     try {
@@ -43,7 +41,6 @@ export class InventoryController {
     }
   }
 
-  @UseGuards(AuthGuard)
   @Get("getAll")
   async getAllProducts() {
     try {
@@ -54,7 +51,6 @@ export class InventoryController {
     }
   }
 
-  @UseGuards(AuthGuard)
   @Put("updateOne/:id/quantity/:quantity")
   async updateOneInventoryItemQuantity(@Param() params) {
     try {
@@ -79,7 +75,6 @@ export class InventoryController {
     }
   }
 
-  @UseGuards(AuthGuard)
   @Delete("deleteOne/:id")
   async deleteOneInventoryItem(@Param() params) {
     try {

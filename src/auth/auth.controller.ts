@@ -4,7 +4,6 @@ import ResponseHandlers from '../utilities/responseHandlers';
 import globalConstants from 'src/global';
 import * as bcrypt from "bcrypt";
 import { userSignUpInfo } from 'src/global/global.interfaces';
-import { AuthGuard } from './auth.guard';
 
 const AllowUnauthorizedRequest = () => SetMetadata("allowUnauthorizedRequest", true);
 
@@ -88,7 +87,6 @@ export class AuthController {
     }
   }
 
-  @UseGuards(AuthGuard)
   @Get("getUserDetails")
   async getUserDetailsFromToken(@Req() req: any) {
     try {

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthGuard } from './auth.guard';
+import { MyAuthGuard } from './auth.guard';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from 'src/database/user.schema';
 
@@ -20,7 +20,7 @@ import { User, UserSchema } from 'src/database/user.schema';
     }])
   ],
   controllers: [ AuthController ],
-  providers: [ AuthService, AuthGuard ]
+  providers: [ AuthService, MyAuthGuard ]
 })
 
 export class AuthModule {}

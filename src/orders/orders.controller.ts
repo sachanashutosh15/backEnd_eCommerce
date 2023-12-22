@@ -97,4 +97,15 @@ export class OrdersController {
       return ResponseHandlers.sendErrorResponse(error.message);
     }
   }
+
+  @Get("executeQuery")
+  async executeQuery() {
+    try {
+      const result = await this.ordersService.executeQuery();
+      return ResponseHandlers.sendSuccessResponse(result, "Successfully executed the query")
+    } catch(error) {
+      console.log(error.message);
+      return ResponseHandlers.sendErrorResponse(error.message);
+    }
+  }
 }

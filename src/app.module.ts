@@ -14,7 +14,7 @@ import { UserController } from './user/user.controller';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrdersModule } from './orders/orders.module';
 import { APP_GUARD } from "@nestjs/core";
-import { AuthGuard } from './auth/auth.guard';
+import { MyAuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -38,7 +38,7 @@ import { AuthGuard } from './auth/auth.guard';
     UserService,
     {
       provide: APP_GUARD,
-      useClass: AuthGuard
+      useClass: MyAuthGuard
     }
   ],
 })

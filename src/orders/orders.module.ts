@@ -4,7 +4,6 @@ import { OrdersService } from './orders.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Order, OrderSchema } from 'src/database/order.schema';
 import { Product, ProductSchema } from 'src/database/product.schema';
-import { AuthGuard } from 'src/auth/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { UserModule } from 'src/user/user.module';
@@ -30,6 +29,6 @@ import { User, UserSchema } from 'src/database/user.schema';
     UserModule
   ],
   controllers: [OrdersController],
-  providers: [OrdersService, AuthGuard, UserService]
+  providers: [OrdersService, UserService]
 })
 export class OrdersModule {}
