@@ -5,11 +5,5 @@
       "src": "/(.*)",
       "dest": "dist/main.js"
     }
-  ],
-  "builds": [
-    {
-      "src": "dist/main.js",
-      "use": "@vercel/node"
-    }
   ]
 }
