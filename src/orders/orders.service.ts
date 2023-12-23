@@ -1,10 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { orderDetails } from 'src/global/global.interfaces';
 // import { Repository } from 'typeorm';
 // import { SqlOrder } from './order.entity';
 import { InventoryService } from 'src/inventory/inventory.service';
-import { Order } from './order.interface';
+import { Order, OrderDetails_int } from './order.interface';
 
 @Injectable()
 export class OrdersService {
@@ -16,7 +15,7 @@ export class OrdersService {
     // private orderRepository: Repository<SqlOrder>
   ) {}
 
-  async placeOrder(orderDetails: orderDetails[]) {
+  async placeOrder(orderDetails: OrderDetails_int[]) {
     try {
       const result = await Promise.all(orderDetails.map(async (orderDetails) => {
         orderDetails.status = "Order Placed";
@@ -90,7 +89,7 @@ export class OrdersService {
         },
         {
           $match: {
-            userId: _id
+            userId: `${_id}`
           }
         }
       ])

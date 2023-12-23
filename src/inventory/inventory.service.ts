@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import * as mongoose from 'mongoose';
 import { Product } from './product.interface';
 import globalConstants from 'src/global';
 
@@ -7,7 +7,7 @@ import globalConstants from 'src/global';
 export class InventoryService {
   constructor(
     @Inject('PRODUCT_MODEL')
-    private productModel: Model<Product>
+    private productModel: mongoose.Model<Product>
   ) {}
 
   async createNew(product: globalConstants.inventoryItem) {
@@ -45,7 +45,7 @@ export class InventoryService {
     }
   }
 
-  async updateProductQuantity(orderQuantity: number, productId: string) {
+  async updateProductQuantity(orderQuantity: number, productId: mongoose.Schema.Types.ObjectId) {
     try {
       const result = await this.productModel.updateOne(
         { _id: productId},
