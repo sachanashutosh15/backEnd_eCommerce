@@ -4,8 +4,8 @@ import ResponseHandlers from '../utilities/responseHandlers';
 import globalConstants from 'src/global';
 import * as bcrypt from "bcrypt";
 import { userSignUpInfo } from 'src/global/global.interfaces';
+import { AllowUnauthorizedRequest } from 'src/global/functions';
 
-const AllowUnauthorizedRequest = () => SetMetadata("allowUnauthorizedRequest", true);
 
 @Controller('auth')
 export class AuthController {
