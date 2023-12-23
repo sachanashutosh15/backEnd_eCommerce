@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { UserModule } from 'src/user/user.module';
 import { User, UserSchema } from 'src/database/user.schema';
+import { orderProviders } from './order.provider';
 
 @Module({
   imports: [
@@ -29,6 +30,6 @@ import { User, UserSchema } from 'src/database/user.schema';
     UserModule
   ],
   controllers: [OrdersController],
-  providers: [OrdersService, UserService]
+  providers: [...orderProviders, OrdersService, UserService]
 })
 export class OrdersModule {}

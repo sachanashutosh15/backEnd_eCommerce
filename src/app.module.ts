@@ -30,7 +30,8 @@ import { MyAuthGuard } from './auth/auth.guard';
     UserModule,
     DataBaseModule,
     InventoryModule,
-    OrdersModule],
+    OrdersModule
+  ],
   controllers: [AppController, AuthController, UserController],
   providers: [
     AppService,

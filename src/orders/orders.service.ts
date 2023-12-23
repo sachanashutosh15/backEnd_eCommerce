@@ -1,17 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Order, OrderDocument } from 'src/database/order.schema';
 import { Product, ProductDocument } from 'src/database/product.schema';
 import { User, UserDocument } from 'src/database/user.schema';
 import { orderDetails } from 'src/global/global.interfaces';
+import { Repository } from 'typeorm';
+import { SqlOrder } from './order.entity';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
     @InjectModel(Product.name) private productModel: Model<ProductDocument>,
-    @InjectModel(User.name) private userModel: Model<UserDocument>
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @Inject('ORDER_REPOSITORY')
+    private orderRepository: Repository<SqlOrder>
   ) {}
 
   async placeOrder(orderDetails: orderDetails[]) {
@@ -24,6 +28,12 @@ export class OrdersService {
           const productId = orderDetails.productId;
           const quantity = orderDetails.quantity;
           await this.updateInventoryProductQuantity(quantity, productId);
+          const newOrder = new SqlOrder();
+          newOrder.userId = 1;
+          newOrder.productId = 1;
+          newOrder.status = "pending";
+          newOrder.quantity = 1;
+          await this.orderRepository.save(newOrder);
           return result;
         } else {
           throw {
