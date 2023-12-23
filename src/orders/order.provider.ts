@@ -1,10 +1,10 @@
-import { DataSource } from "typeorm";
-import { SqlOrder } from "./order.entity";
+import { Connection } from "mongoose";
+import { OrderSchema } from "./order.schema";
 
 export const orderProviders = [
   {
-    provide: 'ORDER_REPOSITORY',
-    useFactory: (dataSource: DataSource) => dataSource.getRepository(SqlOrder),
-    inject: ['DATA_SOURCE']
+    provide: 'ORDER_MODEL',
+    useFactory: (connection: Connection) => connection.model('Order', OrderSchema),
+    inject: ['MONGODB_CONNECTION']
   }
 ];

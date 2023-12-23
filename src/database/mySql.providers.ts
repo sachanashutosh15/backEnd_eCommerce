@@ -1,8 +1,8 @@
 import { DataSource } from "typeorm";
 
-export const databaseProviders = [
+export const mySqlProviders = [
   {
-    provide: 'DATA_SOURCE',
+    provide: 'MYSQL_CONNECTION',
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'mysql',
@@ -10,7 +10,7 @@ export const databaseProviders = [
         port: 3306,
         username: 'sql12672354',
         database: 'sql12672354',
-        password: 'Please wait',
+        password: 'VWHKPtVE4D',
         entities: [
           __dirname + '/../**/*.entity{.ts,.js}',
         ],

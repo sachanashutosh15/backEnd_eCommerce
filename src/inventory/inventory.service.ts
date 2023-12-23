@@ -1,16 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { Inject, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { Product, ProductDocument } from 'src/database/product.schema';
+import { Product } from './product.interface';
 import globalConstants from 'src/global';
 
 @Injectable()
 export class InventoryService {
   constructor(
-    @InjectModel(Product.name) private productModel: Model<ProductDocument>
+    @Inject('PRODUCT_MODEL')
+    private productModel: Model<Product>
   ) {}
 
-  async createNew(product: Product) {
+  async createNew(product: globalConstants.inventoryItem) {
     try {
       const newProduct = new this.productModel(product)
       const result = await newProduct.save();
@@ -30,11 +30,12 @@ export class InventoryService {
     }
   }
 
-  async updateOneInventoryItemQuantity(targetDocId: string, updatedQuantity: number) {
+  async setItemQuantity(targetDocId: string, updatedQuantity: number) {
     try {
-      const result = await this.productModel.updateOne({ _id: targetDocId }, {
-        quantity: updatedQuantity
-      })
+      const result = await this.productModel.updateOne(
+        { _id: targetDocId },
+        { quantity: updatedQuantity }
+      )
       if (result) {
         return result.modifiedCount
       }
@@ -43,6 +44,20 @@ export class InventoryService {
       throw error.message;
     }
   }
+
+  async updateProductQuantity(orderQuantity: number, productId: string) {
+    try {
+      const result = await this.productModel.updateOne(
+        { _id: productId},
+        { $inc: { quantity: -orderQuantity }}
+      )
+      console.log(result);
+      return result;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
 
   async deleteOneInventoryItem(targetDocId: string) {
     try {

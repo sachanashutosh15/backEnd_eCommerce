@@ -1,21 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Order, OrderDocument } from 'src/database/order.schema';
-import { Product, ProductDocument } from 'src/database/product.schema';
-import { User, UserDocument } from 'src/database/user.schema';
 import { orderDetails } from 'src/global/global.interfaces';
-import { Repository } from 'typeorm';
-import { SqlOrder } from './order.entity';
+// import { Repository } from 'typeorm';
+// import { SqlOrder } from './order.entity';
+import { InventoryService } from 'src/inventory/inventory.service';
+import { Order } from './order.interface';
 
 @Injectable()
 export class OrdersService {
   constructor(
-    @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
-    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @Inject('ORDER_REPOSITORY')
-    private orderRepository: Repository<SqlOrder>
+    @Inject('ORDER_MODEL')
+    private orderModel: Model<Order>,
+    private inventoryService: InventoryService
+    // @Inject('ORDER_REPOSITORY')
+    // private orderRepository: Repository<SqlOrder>
   ) {}
 
   async placeOrder(orderDetails: orderDetails[]) {
@@ -27,13 +25,13 @@ export class OrdersService {
         if (result) {
           const productId = orderDetails.productId;
           const quantity = orderDetails.quantity;
-          await this.updateInventoryProductQuantity(quantity, productId);
-          const newOrder = new SqlOrder();
-          newOrder.userId = 1;
-          newOrder.productId = 1;
-          newOrder.status = "pending";
-          newOrder.quantity = 1;
-          await this.orderRepository.save(newOrder);
+          await this.inventoryService.updateProductQuantity(quantity, productId);
+          // const newOrder = new SqlOrder();
+          // newOrder.userId = 1;
+          // newOrder.productId = 1;
+          // newOrder.status = "pending";
+          // newOrder.quantity = 1;
+          // await this.orderRepository.save(newOrder);
           return result;
         } else {
           throw {
@@ -44,19 +42,6 @@ export class OrdersService {
       return result;
     } catch(error) {
       throw error;
-    }
-  }
-
-  async updateInventoryProductQuantity(orderQuantity: number, productId: string) {
-    try {
-      const result = await this.productModel.updateOne(
-        { _id: productId},
-        { $inc: { quantity: -orderQuantity }}
-      )
-      console.log(result);
-      return result;
-    } catch (error) {
-      console.log(error.message);
     }
   }
 
@@ -118,7 +103,7 @@ export class OrdersService {
 
   async executeQuery() {
     try {
-      const result = await this.productModel.aggregate([
+      const result = await this.orderModel.aggregate([
         {
           $match: {
             quantity: {

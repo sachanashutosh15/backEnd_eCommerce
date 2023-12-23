@@ -1,19 +1,15 @@
 import { Module } from '@nestjs/common';
 import { InventoryController } from './inventory.controller';
 import { InventoryService } from './inventory.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Product, ProductSchema } from 'src/database/product.schema';
-import { JwtModule } from '@nestjs/jwt';
+import { productProviders } from './products.providers';
+import { mongoDbProviders } from 'src/database/mongoDb.providers';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{
-      name: Product.name,
-      schema: ProductSchema
-    }]),
-    JwtModule
-  ],
   controllers: [InventoryController],
-  providers: [InventoryService]
+  providers: [
+    InventoryService,
+    ...productProviders,
+    ...mongoDbProviders
+  ]
 })
 export class InventoryModule {}

@@ -4,7 +4,9 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { MyAuthGuard } from './auth.guard';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from 'src/database/user.schema';
+import { UserService } from 'src/user/user.service';
+import { usersProviders } from 'src/user/users.provider';
+import { mongoDbProviders } from 'src/database/mongoDb.providers';
 
 @Module({
   imports: [
@@ -13,14 +15,16 @@ import { User, UserSchema } from 'src/database/user.schema';
       signOptions: {
         expiresIn: "1h"
       }
-    }),
-    MongooseModule.forFeature([{
-      name: User.name,
-      schema: UserSchema
-    }])
+    })
   ],
   controllers: [ AuthController ],
-  providers: [ AuthService, MyAuthGuard ]
+  providers: [
+    AuthService,
+    MyAuthGuard,
+    UserService,
+    ...usersProviders,
+    ...mongoDbProviders
+  ]
 })
 
 export class AuthModule {}
