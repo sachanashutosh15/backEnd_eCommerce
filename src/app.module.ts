@@ -8,29 +8,22 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
 import { DataBaseModule } from './database/database.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './database/user.schema';
 import { UserController } from './user/user.controller';
 import { InventoryModule } from './inventory/inventory.module';
 import { OrdersModule } from './orders/orders.module';
 import { APP_GUARD } from "@nestjs/core";
 import { MyAuthGuard } from './auth/auth.guard';
+import { usersProviders } from './user/users.provider';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://sachanashutosh15:Ashutosh_99@cluster0.agcck.mongodb.net/?retryWrites=true&w=majority', {
-      dbName: "e-comm"
-    }),
-    MongooseModule.forFeature([{
-      name: User.name,
-      schema: UserSchema
-    }]),
     AuthModule,
     JwtModule,
     UserModule,
     DataBaseModule,
     InventoryModule,
-    OrdersModule],
+    OrdersModule
+  ],
   controllers: [AppController, AuthController, UserController],
   providers: [
     AppService,
@@ -39,7 +32,8 @@ import { MyAuthGuard } from './auth/auth.guard';
     {
       provide: APP_GUARD,
       useClass: MyAuthGuard
-    }
+    },
+    ...usersProviders
   ],
 })
 export class AppModule {}

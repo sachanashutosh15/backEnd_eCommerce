@@ -58,7 +58,7 @@ export class InventoryController {
       const targetDocId = params.id;
       const updatedQuantity = params.quantity;
       if (targetDocId && updatedQuantity) {
-        const result = await this.inventoryService.updateOneInventoryItemQuantity(targetDocId, updatedQuantity);
+        const result = await this.inventoryService.setItemQuantity(targetDocId, updatedQuantity);
         console.log("updation result", result);
         if (result === 1) {
           return ResponseHandlers.sendSuccessResponse(null, "Succesfully updated the item Quantity.");

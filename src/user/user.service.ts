@@ -1,12 +1,18 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from 'src/database/user.schema';
+import { Inject, Injectable } from '@nestjs/common';
+import { User } from './user.interface';
 
+interface UserDetails {
+  name: string,
+  email: string,
+  password: string,
+  address: string
+}
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>
+    @Inject('USER_MODEL')
+    private userModel: Model<User>
   ) {}
 
   async findAll(): Promise<User[]> {
@@ -15,6 +21,36 @@ export class UserService {
     } catch(error) {
       console.log(error);
       throw "Some error occurred in db"
+    }
+  }
+
+  async createNew(userDetails: UserDetails): Promise<UserDetails> {
+    try {
+      const createdUser = new this.userModel(userDetails);
+      return await createdUser.save();
+    } catch(error) {
+      console.log(error);
+      throw "Some error occurred"
+    }
+  }
+
+  async findOneByEmail(email: string): Promise<Partial<UserDetails>> {
+    try {
+      const info = await this.userModel.findOne({email: email})
+      console.log("details from db --->", info);
+      if (!info) {
+        return null;
+      }
+      const userDetails = {
+        name: info.name,
+        email: info.email,
+        address: info.address,
+        password: info.password
+      }
+      return userDetails;
+    } catch(error) {
+      console.error(error)
+      throw "Some error occurred"
     }
   }
 

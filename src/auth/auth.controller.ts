@@ -5,13 +5,14 @@ import globalConstants from 'src/global';
 import * as bcrypt from "bcrypt";
 import { userSignUpInfo } from 'src/global/global.interfaces';
 import { AllowUnauthorizedRequest } from 'src/global/functions';
-
+import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 export class AuthController {
 
   constructor(
     private authService: AuthService,
+    private userService: UserService
   ) {}
 
   @Post('signup')
@@ -25,11 +26,12 @@ export class AuthController {
       const address = userInfo.address;
       if(password && name && email && address) {
         console.log(email);
-        const isUserAlreadyPresent = await this.authService.findOne(email);
+        const isUserAlreadyPresent = await this.userService.findOneByEmail(email);
         if(!isUserAlreadyPresent) {
           const hashedPassword = await bcrypt.hash(password, 10);
           userDetails.password = hashedPassword;
-          const result = await this.authService.createNewUser(userDetails);
+
+          const result = await this.userService.createNew(userDetails);
           const token = await this.authService.generateToken(userDetails);
           return ResponseHandlers.sendSuccessResponse({
             accessToken: token,
@@ -52,19 +54,19 @@ export class AuthController {
   @AllowUnauthorizedRequest()
   async signIn(@Body() userInfo: globalConstants.userLoginInfo) {
     try {
-      console.log(userInfo);
+      console.log("userInfo --->", userInfo);
       const password = userInfo.password;
       const email = userInfo.email;
       if (email && password) {
-        const userDetails: any = await this.authService.findOne(email)
-        console.log(userDetails);
+        const userDetails: any = await this.userService.findOneByEmail(email)
+        console.log("userDetails --->", userDetails);
         if(!userDetails) {
           throw {
             message: "Please check your emailId"
           }
         }
         const comparisonRes = await bcrypt.compare(password, userDetails.password);
-        console.log(comparisonRes);
+        console.log("comparisonRes--->", comparisonRes);
         if(!comparisonRes) {
           throw {
             message: "Please check your password"
@@ -74,6 +76,7 @@ export class AuthController {
           name: userDetails.name,
           email: userDetails.email
         }
+        delete userDetails.password;
         const token = await this.authService.generateToken(tokenPayload);
         return ResponseHandlers.sendSuccessResponse({
           token: token,
