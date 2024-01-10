@@ -1,14 +1,14 @@
 import { Module } from "@nestjs/common";
-import { mySqlProviders } from "./mySql.providers";
+import { mySqlProvider } from "./mySql.providers";
 import { mongoDbProviders } from "./mongoDb.providers";
 
 @Module({
   providers: [
-    ...mySqlProviders,
+    ...mySqlProvider,
     ...mongoDbProviders
   ],
   exports: [
-    ...mySqlProviders,
+    ...mySqlProvider,
     ...mongoDbProviders
   ]
 })

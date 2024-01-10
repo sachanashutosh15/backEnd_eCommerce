@@ -1,9 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 // import { Repository } from 'typeorm';
 // import { SqlOrder } from './order.entity';
 import { InventoryService } from 'src/inventory/inventory.service';
 import { Order, OrderDetails_int } from './order.interface';
+import { ObjectId } from 'src/database/mongoDb.providers';
+
 
 @Injectable()
 export class OrdersService {
@@ -44,7 +46,7 @@ export class OrdersService {
     }
   }
 
-  async updateOrderStatus(updatedStatus: string, orderId: string) {
+  async updateOrderStatus(updatedStatus: string, orderId: ObjectId) {
     try {
       const result = await this.orderModel.updateOne(
         { _id: orderId },
@@ -76,7 +78,7 @@ export class OrdersService {
     }
   }
 
-  async getMyOrders(_id: string) {
+  async getMyOrders(_id: mongoose.Schema.Types.ObjectId) {
     try {
       const myOrders = await this.orderModel.aggregate([
         {
@@ -89,7 +91,7 @@ export class OrdersService {
         },
         {
           $match: {
-            userId: `${_id}`
+            userId: _id
           }
         }
       ])

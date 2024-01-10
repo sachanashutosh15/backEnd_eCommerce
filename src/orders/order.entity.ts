@@ -1,17 +1,17 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class SqlOrder {
+export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column()
-  productId: number;
+  productId: string;
 
-  @Column()
+  @Column('int')
   quantity: number;
 
   @Column()

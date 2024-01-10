@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 
-export const mySqlProviders = [
+export const mySqlProvider = [
   {
     provide: 'MYSQL_CONNECTION',
     useFactory: async () => {
