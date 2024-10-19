@@ -7,7 +7,7 @@ async function bootstrap() {
   console.log("Port", process.env.PORT);
   const app = await NestFactory.create(AppModule, { cors: true });
   app.enableCors({
-    origin: ["https://ecommerce-client-opal.vercel.app"],
+    origin: ["https://ecommerce-client-opal.vercel.app", "http://localhost:3000"],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   })
   await app.listen(process.env.PORT || 3000);

@@ -6,7 +6,7 @@ export const mySqlProvider = [
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'mysql',
-        url: "mysql://root:cUWSHMLDOoWkYNoXBVtcTvnXyBtjPAKJ@autorack.proxy.rlwy.net:51097/railway",
+        url: process.env.MYSQL_CONNECTION_STRING,
         entities: [
           __dirname + '/../**/*.entity{.ts,.js}',
         ],
