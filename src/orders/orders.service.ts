@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import mongoose, { Model } from 'mongoose';
-// import { Repository } from 'typeorm';
-// import { SqlOrder } from './order.entity';
+import { Repository } from 'typeorm';
+import { SqlOrder } from './order.entity';
 import { InventoryService } from 'src/inventory/inventory.service';
 import { Order, OrderDetails_int } from './order.interface';
 import { ObjectId } from 'src/database/mongoDb.providers';
@@ -12,9 +12,9 @@ export class OrdersService {
   constructor(
     @Inject('ORDER_MODEL')
     private orderModel: Model<Order>,
-    private inventoryService: InventoryService
-    // @Inject('ORDER_REPOSITORY')
-    // private orderRepository: Repository<SqlOrder>
+    private inventoryService: InventoryService,
+    @Inject('ORDER_REPOSITORY')
+    private orderRepository: Repository<SqlOrder>
   ) {}
 
   async placeOrder(orderDetails: OrderDetails_int[]) {

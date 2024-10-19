@@ -1,7 +1,7 @@
 import { Connection } from "mongoose";
 import { OrderSchema } from "./order.schema";
 import { DataSource } from "typeorm";
-import { Order } from "./order.entity";
+import { SqlOrder } from "./order.entity";
 
 export const orderProviders = [
   {
@@ -11,7 +11,7 @@ export const orderProviders = [
   },
   {
     provide: 'ORDER_REPOSITORY',
-    useFactory: ( dataSource: DataSource ) => dataSource.getRepository(Order),
+    useFactory: ( dataSource: DataSource ) => dataSource.getRepository(SqlOrder),
     inject: [ 'MYSQL_CONNECTION' ]
   }
 ];

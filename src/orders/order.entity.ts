@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Order {
+export class SqlOrder {
   @PrimaryGeneratedColumn()
   id: number;
 
