@@ -6,15 +6,11 @@ export const mySqlProvider = [
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'mysql',
-        host: 'sql12.freemysqlhosting.net',
-        port: 3306,
-        username: 'sql12672354',
-        database: 'sql12672354',
-        password: 'VWHKPtVE4D',
+        url: "mysql://root:cUWSHMLDOoWkYNoXBVtcTvnXyBtjPAKJ@autorack.proxy.rlwy.net:51097/railway",
         entities: [
           __dirname + '/../**/*.entity{.ts,.js}',
         ],
-        synchronize: true
+        synchronize: false
       })
       return dataSource.initialize();
     }
